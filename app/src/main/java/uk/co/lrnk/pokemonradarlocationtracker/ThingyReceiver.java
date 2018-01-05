@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.SystemClock;
 
 public class ThingyReceiver extends BroadcastReceiver {
-    private static final int PERIOD = 100;
+    private static final int PERIOD = 60 * 1000;
 
     @Override
     public void onReceive(Context ctxt, Intent i) {
