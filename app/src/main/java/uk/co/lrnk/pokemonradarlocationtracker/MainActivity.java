@@ -8,6 +8,7 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,18 +25,25 @@ public class MainActivity extends AppCompatActivity {
         // one minute is the minimum
         final int PERIOD = 60 * 1000;
 
-        AlarmManager alarmManager =
-                (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(this, LocationTrackerService.class);
-        PendingIntent alarmIntent = PendingIntent.getService(this, 0, i, 0);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent alarmIntent = getTrackerIntent();
 
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + PERIOD, PERIOD, alarmIntent);
+
+        Toast.makeText(getApplicationContext(), "Sending location roughly every " + PERIOD + "ms", Toast.LENGTH_LONG).show();
     }
 
-    public void turnOfLocationTracking(View view) {
-        if (alarmManager != null) {
-            alarmManager.cancel(alarmIntent);
-        }
+    public void turnOffLocationTracking(View view) {
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent alarmIntent = getTrackerIntent();
+        alarmManager.cancel(alarmIntent);
+        Toast.makeText(getApplicationContext(), "Turning off location tracking", Toast.LENGTH_LONG).show();
+    }
+
+    private PendingIntent getTrackerIntent() {
+        Intent intent = new Intent(this, LocationTrackerService.class);
+        return PendingIntent.getService(this, 0, intent, 0);
     }
 }
