@@ -11,8 +11,6 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AlarmManager alarmManager;
-    private PendingIntent alarmIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +21,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void turnOnLocationTracking(View view) {
 
-        // todo only allow it to run once
-
+        // one minute is the minimum
         final int PERIOD = 60 * 1000;
 
-        alarmManager =
+        AlarmManager alarmManager =
                 (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(this, LocationTrackerService.class);
-        alarmIntent = PendingIntent.getService(this, 0, i, 0);
+        PendingIntent alarmIntent = PendingIntent.getService(this, 0, i, 0);
 
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + PERIOD, PERIOD, alarmIntent);

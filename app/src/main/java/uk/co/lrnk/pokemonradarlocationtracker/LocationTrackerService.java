@@ -2,17 +2,28 @@ package uk.co.lrnk.pokemonradarlocationtracker;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.SystemClock;
+import android.os.Handler;
+import android.widget.Toast;
 
 public class LocationTrackerService extends IntentService {
 
-    public LocationTrackerService () {
+    Handler mMainThreadHandler = null;
+
+    public LocationTrackerService() {
         super("location tracker service");
+        mMainThreadHandler = new Handler();
+
     }
 
     @Override
     protected void onHandleIntent(Intent workIntent) {
         System.out.println("Hello from this intent thingy 👋");
-        System.out.println(SystemClock.elapsedRealtime());
+        mMainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), "Hello 👋", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }
