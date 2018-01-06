@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         PendingIntent alarmIntent = getTrackerIntent();
 
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + PERIOD, PERIOD, alarmIntent);
 
         Toast.makeText(getApplicationContext(), "Sending location roughly every " + PERIOD + "ms", Toast.LENGTH_LONG).show();

@@ -21,7 +21,7 @@ public class LocationTrackerService extends IntentService {
         mMainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(), "Hello 👋", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Sending location to Pokémon Radar 📍", Toast.LENGTH_LONG).show();
             }
         });
 
