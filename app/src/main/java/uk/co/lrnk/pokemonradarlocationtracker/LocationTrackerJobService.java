@@ -89,7 +89,28 @@ public class LocationTrackerJobService extends JobService {
                             public void onSuccess(Location location) {
                                 if (location != null) {
                                     System.out.println("sick, got location " + location);
-                                    sendUpdateRequest(location);
+
+                                    SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
+
+                                    // weird shit for working out prev distances
+                                    float prevLat = settings.getFloat("lat", 0);
+                                    float prevLng = settings.getFloat("lng", 0);
+                                    float[] results = new float[3];
+                                    Location.distanceBetween(prevLat, prevLng, location.getLatitude(), location.getLongitude(), results);
+                                    float distance = results[0];
+
+                                    System.out.println("distance from last move was " + distance + " metres");
+
+                                    if(distance > 50) {
+                                        sendUpdateRequest(location);
+
+                                        SharedPreferences.Editor editor = settings.edit();
+                                        editor.putFloat("lat", (float) location.getLatitude());
+                                        editor.putFloat("lng", (float) location.getLongitude());
+                                        editor.apply();
+                                    } else {
+                                        System.out.println("Not moved much since last time, don't bother updating");
+                                    }
                                 } else {
                                     System.out.println("location was null for some reason???");
                                 }
