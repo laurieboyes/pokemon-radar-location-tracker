@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 System.out.println(s);
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString("uuid", s.toString());
+                editor.putString("uuid", s.toString().trim());
                 editor.apply();
 
                 if (isTrackingOn()) {
