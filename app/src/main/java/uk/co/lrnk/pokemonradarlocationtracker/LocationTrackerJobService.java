@@ -39,8 +39,7 @@ public class LocationTrackerJobService extends JobService {
 
     private void sendUpdateRequest(Location location) {
         RequestQueue queue = Volley.newRequestQueue(LocationTrackerJobService.this);
-//        String url = "https://mon-radar.herokuapp.com/api/updateLocation/";
-        String url = "https://api.myjson.com/bins/fpe57";
+        String url = "https://mon-radar.herokuapp.com/api/updateLocation/";
 
         try {
 
@@ -49,8 +48,7 @@ public class LocationTrackerJobService extends JobService {
             if(!uuid.isEmpty()) {
                 JSONObject body = new JSONObject("{\"uuid\":\"" + uuid + "\",\"location\":{\"lat\":\"" + location.getLatitude() + "\",\"lng\":\"" + location.getLongitude() + "\"}, \"updatedAt\":\"" + new Date().toString() + "\"}");
 
-                // Remember for real URL method must be POST
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, body,
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -60,7 +58,10 @@ public class LocationTrackerJobService extends JobService {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        System.out.println("Response error: " + error);
+                        System.out.println("Response error: " + error.getMessage());
+                        if(error.networkResponse.statusCode == 404) {
+                            Toast.makeText(getApplicationContext(), "Pokémon Radar returned a 404, check your UUID is correct", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
                 queue.add(request);
